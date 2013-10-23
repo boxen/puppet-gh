@@ -3,26 +3,49 @@
 # Examples
 #
 #   include gh
-class gh {
-  if defined_with_params(Package[hub], { 'ensure' => 'latest' }) {
-    fail('The gh package is incompatible with the hub package!')
-  }
+class gh(
+  $ensure = present
+) {
 
-  include boxen::config
+  case $ensure {
+    present: {
+      if defined_with_params(Package[hub], { 'ensure' => 'latest' }) {
+        fail('The gh package is incompatible with the hub package!')
+      }
 
-  package { 'gh':
-    ensure => latest
-  }
+      include boxen::config
 
-  git::config::global { 'gh.protocol':
-    value => 'https'
-  }
+      package { 'gh':
+        ensure => latest
+      }
 
-  if $::osfamily == 'Darwin' {
-    include homebrew::config
+      git::config::global { 'gh.protocol':
+        value => 'https'
+      }
 
-    file { "${boxen::config::envdir}/gh.sh":
-      content => template('gh/env.sh.erb')
+      if $::osfamily == 'Darwin' {
+        include homebrew::config
+
+        file { "${boxen::config::envdir}/gh.sh":
+          content => template('gh/env.sh.erb')
+        }
+      }
     }
+
+    absent: {
+      package { 'gh':
+        ensure => absent
+      }
+
+      file { "${boxen::config::envdir}/gh.sh":
+        ensure => absent
+      }
+    }
+
+    default: {
+      fail("GH#ensure must be present or absent!")
+    }
+
   }
+
 }
