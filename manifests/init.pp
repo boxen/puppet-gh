@@ -15,8 +15,11 @@ class gh(
 
       include boxen::config
 
-      package { 'gh':
-        ensure => latest
+      homebrew::formula { 'gh': }
+
+
+      package { 'boxen/brews/gh':
+        ensure => latest,
       }
 
       git::config::global { 'gh.protocol':
