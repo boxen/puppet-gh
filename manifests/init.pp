@@ -39,6 +39,15 @@ class gh(
           content  => template('gh/env.sh.erb'),
           priority => lower,
         }
+
+        ensure_resource('file', "/Users/${::boxen_user}/.config", {
+          'ensure' => 'directory',
+        })
+
+        file { "/Users/${::boxen_user}/.config/gh":
+          ensure => present,
+          content => "{\"user\":\"${::github_login}\",\"token\":\"${::github_token}\"}\n",
+        }
       }
     }
 
