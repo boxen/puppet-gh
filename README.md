@@ -12,7 +12,8 @@ include gh
 
 ## Required Puppet Modules
 
-* `boxen`
+* `boxen` >= 3.3.3
+* `homebrew` >= 1.5.0
 
 ## Development
 

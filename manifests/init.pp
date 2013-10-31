@@ -53,7 +53,7 @@ class gh(
     }
 
     default: {
-      fail("GH#ensure must be present or absent!")
+      fail('GH#ensure must be present or absent!')
     }
 
   }

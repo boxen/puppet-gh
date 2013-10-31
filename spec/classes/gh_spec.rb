@@ -15,7 +15,7 @@ describe 'gh' do
   end
 
   it { should include_class('boxen::config') }
-  it { should contain_package('gh').with_ensure('latest') }
+  it { should contain_package('boxen/brews/gh').with_ensure('latest') }
 
   it 'sets up gh.sh file' do
     should contain_file("#{env_dir}/gh.sh")
