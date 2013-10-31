@@ -4,7 +4,8 @@
 #
 #   include gh
 class gh(
-  $ensure = present
+  $ensure          = present,
+  $alias_gh_to_git = true,
 ) {
 
   case $ensure {
@@ -30,7 +31,13 @@ class gh(
         include homebrew::config
 
         file { "${boxen::config::envdir}/gh.sh":
-          content => template('gh/env.sh.erb')
+          ensure  => absent,
+        }
+
+        ->
+        boxen::env_script { 'gh':
+          content  => template('gh/env.sh.erb'),
+          priority => lower,
         }
       }
     }
