@@ -53,11 +53,13 @@ class gh(
 
     absent: {
       package { 'gh':
-        ensure => absent
+        ensure => absent,
       }
 
-      file { "${boxen::config::envdir}/gh.sh":
-        ensure => absent
+      boxen::env_script { 'gh':
+        ensure   => absent,
+        priority => lower,
+        content  => "this is a hack",
       }
     }
 
