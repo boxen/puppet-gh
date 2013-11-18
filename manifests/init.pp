@@ -45,7 +45,7 @@ class gh(
         })
 
         file { "/Users/${::boxen_user}/.config/gh":
-          ensure => present,
+          ensure  => present,
           content => "{\"user\":\"${::github_login}\",\"token\":\"${::github_token}\"}\n",
         }
       }
@@ -59,7 +59,7 @@ class gh(
       boxen::env_script { 'gh':
         ensure   => absent,
         priority => lower,
-        content  => "this is a hack",
+        content  => 'this is a hack',
       }
     }
 
