@@ -46,7 +46,7 @@ class gh(
 
         file { "/Users/${::boxen_user}/.config/gh":
           ensure  => present,
-          content => "{\"user\":\"${::github_login}\",\"token\":\"${::github_token}\"}\n",
+          content => "[{\"host\":\"github.com\",\"user\":\"${::github_login}\",\"token\":\"${::github_token}\"}]\n",
         }
       }
     }
