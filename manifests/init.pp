@@ -46,7 +46,7 @@ class gh(
 
         file { "/Users/${::boxen_user}/.config/gh":
           ensure  => present,
-          content => "{\"autoupdate\":false,\"credentials\":[{\"host\":\"github.com\",\"user\":\"${::github_login}\",\"access_token\":\"${::github_token}\"}]}\n",
+          content => "{\"credentials\":[{\"host\":\"github.com\",\"user\":\"${::github_login}\",\"access_token\":\"${::github_token}\"}]}\n",
         }
       }
     }
