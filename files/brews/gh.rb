@@ -1,26 +1,38 @@
 require "formula"
 
 class Gh < Formula
-  VERSION = "1.0.0"
-  ARCH = if MacOS.prefer_64_bit?
-           "amd64"
-         else
-           "386"
-         end
+  VERSION = "2.0.0"
+  SOURCE_SHA1 = "ae44a538ca648efe1914d9ffb1af5ab23e2d879e"
+  BOTTLE_SHA1 = "ba504c443f5fd289895e669dffa0eb67cd257add"
 
   homepage "https://github.com/jingweno/gh"
+  url "https://github.com/jingweno/gh/archive/v#{VERSION}.zip"
+  sha1 SOURCE_SHA1
   head "https://github.com/jingweno/gh.git"
-  url "https://github.com/jingweno/gh/releases/download/v#{VERSION}/gh_#{VERSION}_darwin_#{ARCH}.zip"
-  version VERSION
+
+  bottle do
+    root_url "https://github.com/jingweno/gh/releases/download/v#{VERSION}"
+    prefix :any
+    cellar :any
+    sha1 BOTTLE_SHA1 => :mavericks
+  end
+
+  depends_on "go" => :build
+
+  option 'without-completions', 'Disable bash/zsh completions'
 
   def install
+    system "script/make"
     bin.install "gh"
-    bash_completion.install "gh.bash_completion.sh"
-    zsh_completion.install "gh.zsh_completion" => "_gh"
+
+    if build.with? 'completions'
+      bash_completion.install "etc/gh.bash_completion.sh"
+      zsh_completion.install "etc/gh.zsh_completion" => "_gh"
+    end
   end
 
   def caveats; <<-EOS.undent
-  To upgrade gh, run `brew upgrade` and `brew upgrade gh`
+  To upgrade gh, run `brew update` and `brew upgrade gh`
 
   More information here: https://github.com/jingweno/gh/blob/master/README.md
     EOS
