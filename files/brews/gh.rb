@@ -1,44 +1,34 @@
 require "formula"
 
 class Gh < Formula
-  VERSION = "2.0.0"
-  SOURCE_SHA1 = "ae44a538ca648efe1914d9ffb1af5ab23e2d879e"
-  BOTTLE_SHA1 = "ba504c443f5fd289895e669dffa0eb67cd257add"
-
   homepage "https://github.com/jingweno/gh"
-  url "https://github.com/jingweno/gh/archive/v#{VERSION}.zip"
-  sha1 SOURCE_SHA1
+  url "https://github.com/jingweno/gh/archive/v2.1.0.tar.gz"
+  sha1 "0673343542fedd6780bdb1d5a773c45f35a9ab28"
   head "https://github.com/jingweno/gh.git"
 
   bottle do
-    root_url "https://github.com/jingweno/gh/releases/download/v#{VERSION}"
-    prefix :any
-    cellar :any
-    sha1 BOTTLE_SHA1 => :mavericks
+    sha1 "8f4434cfa3a015ac92f22dd5b043d7c7ed5bd094" => :mavericks
+    sha1 "c6fdfd0562cd00fd2c30aaeb9926e0372a5c31cf" => :mountain_lion
+    sha1 "c910b882aec49ae1057c1510d79bf84acab8d447" => :lion
   end
 
   depends_on "go" => :build
 
-  option 'without-completions', 'Disable bash/zsh completions'
+  option "without-completions", "Disable bash/zsh completions"
 
   def install
-    system "script/make"
+    system "script/make", "--no-update"
     bin.install "gh"
 
-    if build.with? 'completions'
+    if build.with? "completions"
       bash_completion.install "etc/gh.bash_completion.sh"
       zsh_completion.install "etc/gh.zsh_completion" => "_gh"
     end
   end
 
-  def caveats; <<-EOS.undent
-  To upgrade gh, run `brew update` and `brew upgrade gh`
-
-  More information here: https://github.com/jingweno/gh/blob/master/README.md
-    EOS
-  end
-
   test do
-    assert_equal VERSION, `#{bin}/gh version`.split.last
+    HOMEBREW_REPOSITORY.cd do
+      assert_equal 'bin/brew', `#{bin}/gh ls-files -- bin`.strip
+    end
   end
 end
